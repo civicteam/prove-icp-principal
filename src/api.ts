@@ -57,10 +57,13 @@ export const verify = async (
   console.log('verifyPowo decoded', { decodedSignature, decodedMessage });
   const useTypes = getTypes(verifierAddress, message);
 
-  const recoveredAddress = verifyTypedData(domain, useTypes, decodedMessage, decodedSignature);
-  if (recoveredAddress !== address) {
-    throw new Error('Message was signed by unexpected wallet');
-  }
+  // TODO @lilly verify the delegation
+  // https://github.com/dfinity/internet-identity/blob/5b9ed988a76322a5a87dd1f5f62f2029272f1c9c/src/sig-verifier-js/src/lib.rs#L89
+
+  // const recoveredAddress = verifyTypedData(domain, useTypes, decodedMessage, decodedSignature);
+  // if (recoveredAddress !== address) {
+  //   throw new Error('Message was signed by unexpected wallet');
+  // }
 
   if (new Date(decodedMessage.expires).getTime() < Date.now()) {
     throw new Error('Token Expired');

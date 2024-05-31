@@ -9,7 +9,7 @@ export type EthPowoMessage = {
 };
 
 export const defaultDomain: TypedDataDomain = {
-  name: 'Proof Of Ethereum Wallet Ownership',
+  name: 'Proof Of ICP Principal Ownership',
   version: '1',
 };
 

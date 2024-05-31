@@ -7,7 +7,7 @@ const expired = {
     'eyJleHBpcmVzIjoiMjAyMy0wNS0wNFQxMzoyODoxNy45MThaIiwibWVzc2FnZSI6InRlc3QifQ==.MHhiMmEyZmQ5MWFiMDNkYzQwN2UwMjIxZDdhMjVlOGY5ZDIzNmI5Y2U1NGYxODA1MDVjYjE2NWYwMmMyMDQxMTBkNzhkNDRhMTQzMWY4NTI3YWY2OGZjZTg1MWRjZmI2ZDcwYzA5NjVmN2FlNGM2NWYyYjcwZDRkOWU4MjBlOWRiOTFj',
 };
 
-describe('prove-ethereum-wallet', () => {
+describe('prove-icp-principal', () => {
   afterEach(() => jest.restoreAllMocks());
 
   let wallet: Wallet;

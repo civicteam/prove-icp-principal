@@ -21,7 +21,7 @@ import { verify } from '../../src/index';
   console.log(args);
 
   const { proof, address } = args;
-  console.log('Attempting to verify ethereum proof', proof);
+  console.log('Attempting to verify ICP principals', proof);
   const result = await verify(address as string, proof as string, {
     message: 'https://passv2-dev.civic.com',
   });

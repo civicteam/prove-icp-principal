@@ -1,7 +1,7 @@
 {
-  "name": "@identity.com/prove-ethereum-wallet",
-  "version": "1.1.1",
-  "description": "Library for providing a standard proof creation and verification for ethereum wallets",
+  "name": "@civic/prove-icp-principal",
+  "version": "0.0.0",
+  "description": "Library for providing a standard proof creation and verification for ICP principals",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -23,14 +23,14 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "module": "dist/prove-ethereum-wallet.esm.js",
+  "module": "dist/prove-icp-principal.esm.js",
   "size-limit": [
     {
-      "path": "dist/prove-ethereum-wallet.cjs.production.min.js",
+      "path": "dist/prove-icp-principal.cjs.production.min.js",
       "limit": "110 KB"
     },
     {
-      "path": "dist/prove-ethereum-wallet.esm.js",
+      "path": "dist/prove-icp-principal.esm.js",
       "limit": "10 KB"
     }
   ],

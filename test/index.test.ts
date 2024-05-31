@@ -18,14 +18,14 @@ describe('prove-icp-principal', () => {
   });
 
   it('creates a wallet ownership proof when a signer function is provided', async () => {
-    const proof = await create((...args) => wallet._signTypedData(...args), {
+    const proof = await create({
       message,
     });
     expect(proof).toMatch(/.*\..*/); // the message is a base64 version of the signature concatenated with the message
   });
 
   it('verifies wallet ownership with provided signer function', async () => {
-    const proof = await create((...args) => wallet._signTypedData(...args), {
+    const proof = await create({
       message,
     });
     await expect(verify(wallet.address, proof, { message })).resolves.not.toThrow();
@@ -34,7 +34,7 @@ describe('prove-icp-principal', () => {
   it('throws an error if the transaction is signed with a different key', async () => {
     const someOtherKey = Wallet.createRandom();
 
-    const proof = await create((...args) => wallet._signTypedData(...args), {
+    const proof = await create({
       message,
     });
     await expect(verify(someOtherKey.address, proof, { message })).rejects.toThrow();
@@ -45,14 +45,14 @@ describe('prove-icp-principal', () => {
   });
 
   it("throws an error if the message doesn't match", async () => {
-    const proof = await create((...args) => wallet._signTypedData(...args), {
+    const proof = await create({
       message: 'bad',
     });
     await expect(verify(wallet.address, proof, { message: 'test' })).rejects.toThrow('Bad message');
   });
 
   it("throws an error if the verifierAddress doesn't match", async () => {
-    const proof = await create((...args) => wallet._signTypedData(...args), {
+    const proof = await create({
       verifierAddress: 'bad',
       types: {
         PoWo: [
@@ -75,7 +75,7 @@ describe('prove-icp-principal', () => {
   });
 
   it('verifies wallet ownership when only verifier address is passed', async () => {
-    const proof = await create((...args) => wallet._signTypedData(...args), {
+    const proof = await create({
       verifierAddress: 'good',
       types: {
         PoWo: [

@@ -2,6 +2,7 @@ import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
 import { Buffer } from 'buffer';
 import { verifyTypedData } from 'ethers/lib/utils';
 import { CreatePowoOptions, defaultDomain, EthPowoMessage, VerifyPowoOptions } from './types';
+import { authWithII } from './auth';
 
 const getTypes = (verifierAddress?: string, message?: string) => {
   const useTypes = {
@@ -17,12 +18,8 @@ const getTypes = (verifierAddress?: string, message?: string) => {
 };
 
 export const create = async (
-  signTypedData: (
-    domain: TypedDataDomain,
-    types: Record<string, TypedDataField[]>,
-    value: EthPowoMessage
-  ) => Promise<string>,
-  { domain = defaultDomain, message, verifierAddress }: CreatePowoOptions
+  { domain = defaultDomain, message, verifierAddress }: CreatePowoOptions,
+  url?: string
 ): Promise<string> => {
   const tokenDurationMs = 1000 * 5 * 60; // 5 minutes
   const expires = new Date(Date.now() + tokenDurationMs);
@@ -31,14 +28,20 @@ export const create = async (
     ...(message ? { message } : {}),
     ...(verifierAddress ? { verifierAddress } : {}),
   };
-  const useTypes = getTypes(verifierAddress, message);
-  const signature = await signTypedData(domain, useTypes, powoMessage);
-  if (!signature) throw new Error('Error creating powo');
 
   const msgString = JSON.stringify(powoMessage);
-  const messageB64 = Buffer.from(msgString).toString('base64');
-  const signatureB64 = Buffer.from(signature).toString('base64');
-  return `${messageB64}.${signatureB64}`;
+  const messageB64 = Buffer.from(msgString, 'base64');
+
+  const delegationIdentity = await authWithII({
+    // The url needs to be aligned with the root key in the backend
+    // url: "http://internet_identity.localhost:5173",
+    url: url || "https://jqajs-xiaaa-aaaad-aab5q-cai.ic0.app/",
+    sessionPublicKey: new Uint8Array(messageB64),
+  });
+  const delegationString = JSON.stringify(delegationIdentity.getDelegation().toJSON());
+
+  const delegationB64 = Buffer.from(delegationString).toString('base64');
+  return `${messageB64}.${delegationB64}`;
 };
 
 export const verify = async (

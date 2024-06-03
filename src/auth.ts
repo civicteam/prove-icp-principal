@@ -40,7 +40,7 @@ export const authWithII = async ({
   iiUrl.hash = "#authorize";
 
   // Open an II window and kickstart the flow
-  const win = window.open(iiUrl, "ii-window");
+  const win = window.open(iiUrl.toString(), "ii-window");
   if (win === null) {
     throw new Error(`Could not open window for '${iiUrl}'`);
   }

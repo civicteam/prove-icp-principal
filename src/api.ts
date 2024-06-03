@@ -51,20 +51,21 @@ export const verify = async (
   { domain = defaultDomain, message, verifierAddress }: VerifyPowoOptions
 ): Promise<boolean> => {
   console.log('verifyPowo raw', { address, proof });
-  const [b64TypedMessage, signature] = proof.split('.');
-  const decodedSignature = Buffer.from(signature, 'base64').toString();
-  const decodedMessage = JSON.parse(Buffer.from(b64TypedMessage, 'base64').toString('utf-8')) as EthPowoMessage;
+  const [b64TypedMessage, delegation] = proof.split('.');
+  const decodedDelegation = Buffer.from(delegation, 'base64').toString();
+  const decodedMessageAsBuffer = Buffer.from(b64TypedMessage, 'base64');
+  const decodedMessage = JSON.parse(decodedMessageAsBuffer.toString('utf-8')) as EthPowoMessage;
 
-  console.log('verifyPowo decoded', { decodedSignature, decodedMessage });
+  console.log('verifyPowo decoded', { decodedSignature: decodedDelegation, decodedMessage });
   const useTypes = getTypes(verifierAddress, message);
 
-  const recoveredAddress = verifyTypedData(domain, useTypes, decodedMessage, decodedSignature);
+  const recoveredAddress = verifyTypedData(domain, useTypes, decodedMessage, decodedDelegation);
   if (recoveredAddress !== address) {
     throw new Error('Message was signed by unexpected wallet');
   }
   // Prepare the parameters
-  const challenge: Uint8Array = Buffer.from(JSON.stringify({ expiry: expiry, message, verifierAddress }), 'base64');
-  const signedDelegationChainJson: string = decodedSignature;
+  const challenge: Uint8Array = decodedMessageAsBuffer;
+  const signedDelegationChainJson: string = decodedDelegation;
   const currentTimeNs: bigint = BigInt(Date.now());
   const iiCanisterId: string = "be2us-64aaa-aaaaa-qaabq-cai";
   //  "rdmx6-jaaaa-aaaaa-aaadq-cai"; // Internet Identity Canister ID

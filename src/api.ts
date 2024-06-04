@@ -48,7 +48,7 @@ export const create = async (
 export const verify = async (
   address: string,
   proof: string,
-  { domain = defaultDomain, message, verifierAddress }: VerifyPowoOptions
+  { message, verifierAddress }: VerifyPowoOptions
 ): Promise<boolean> => {
   console.log('verifyPowo raw', { address, proof });
   const [b64TypedMessage, delegation] = proof.split('.');
@@ -57,12 +57,7 @@ export const verify = async (
   const decodedMessage = JSON.parse(decodedMessageAsBuffer.toString('utf-8')) as EthPowoMessage;
 
   console.log('verifyPowo decoded', { decodedSignature: decodedDelegation, decodedMessage });
-  const useTypes = getTypes(verifierAddress, message);
 
-  const recoveredAddress = verifyTypedData(domain, useTypes, decodedMessage, decodedDelegation);
-  if (recoveredAddress !== address) {
-    throw new Error('Message was signed by unexpected wallet');
-  }
   // Prepare the parameters
   const challenge: Uint8Array = decodedMessageAsBuffer;
   const signedDelegationChainJson: string = decodedDelegation;

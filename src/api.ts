@@ -19,7 +19,7 @@ const getTypes = (verifierAddress?: string, message?: string) => {
 };
 
 export const create = async (
-  { domain = defaultDomain, message, verifierAddress }: CreatePowoOptions,
+  { message, verifierAddress }: CreatePowoOptions,
   url?: string
 ): Promise<string> => {
   const tokenDurationMs = 1000 * 5 * 60; // 5 minutes
@@ -29,7 +29,6 @@ export const create = async (
     ...(message ? { message } : {}),
     ...(verifierAddress ? { verifierAddress } : {}),
   };
-  console.log(domain);
   const msgString = JSON.stringify(powoMessage);
   const messageB64 = Buffer.from(msgString, 'base64');
 

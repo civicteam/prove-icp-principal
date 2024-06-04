@@ -19,7 +19,7 @@ const getTypes = (verifierAddress?: string, message?: string) => {
 };
 
 export const create = async (
-  { message, verifierAddress }: CreatePowoOptions,
+  { message }: CreatePowoOptions,
   url?: string
 ): Promise<string> => {
   const tokenDurationMs = 1000 * 5 * 60; // 5 minutes
@@ -27,7 +27,6 @@ export const create = async (
   const powoMessage: EthPowoMessage = {
     expires: expires.toISOString(),
     ...(message ? { message } : {}),
-    ...(verifierAddress ? { verifierAddress } : {}),
   };
   const msgString = JSON.stringify(powoMessage);
   const messageB64 = Buffer.from(msgString, 'base64');
@@ -47,7 +46,7 @@ export const create = async (
 export const verify = async (
   address: string,
   proof: string,
-  { message, verifierAddress }: VerifyPowoOptions
+  { message }: VerifyPowoOptions
 ): Promise<boolean> => {
   console.log('verifyPowo raw', { address, proof });
   const [b64TypedMessage, delegation] = proof.split('.');
@@ -80,8 +79,5 @@ export const verify = async (
     throw new Error('Bad message');
   }
 
-  if (decodedMessage.verifierAddress && verifierAddress && decodedMessage.verifierAddress !== verifierAddress) {
-    throw new Error('Bad verifier address');
-  }
   return true;
 };

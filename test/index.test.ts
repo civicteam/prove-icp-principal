@@ -3,7 +3,7 @@ import { create, verify } from '../src';
 
 const proofFixture =
 {
-  "expiration": "1717616263488367437",
+  "expiration": 1717616263488367437n,
   "delegation": {
     "pubkey": {
       "0": 123,

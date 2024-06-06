@@ -57,7 +57,7 @@ export const verify = async (
   address: string,
   proof: string,
   { message }: VerifyPowoOptions
-): Promise<{isVerified: boolean, principal: string}> => {
+): Promise<boolean> => {
   console.log('verifyPowo raw', { address, proof });
   const [b64TypedMessage, delegation] = proof.split('.');
   const decodedDelegation = Buffer.from(delegation, 'base64').toString();
@@ -74,9 +74,8 @@ export const verify = async (
   //  "rdmx6-jaaaa-aaaaa-aaadq-cai"; // Internet Identity Canister ID
   const icRootPublicKeyRaw: Uint8Array = new Uint8Array([48, 129, 130, 48, 29, 6, 13, 43, 6, 1, 4, 1, 130, 220, 124, 5, 3, 1, 2, 1, 6, 12, 43, 6, 1, 4, 1, 130, 220, 124, 5, 3, 2, 1, 3, 97, 0, 160, 77, 135, 31, 145, 159, 194, 80, 174, 43, 90, 124, 144, 184, 158, 59, 46, 84, 63, 77, 205, 139, 206, 236, 45, 175, 165, 202, 64, 205, 204, 110, 134, 175, 248, 58, 17, 63, 123, 30, 113, 149, 87, 103, 105, 233, 207, 182, 10, 149, 70, 250, 9, 129, 114, 188, 216, 126, 102, 164, 188, 37, 26, 255, 23, 85, 220, 156, 57, 132, 182, 230, 251, 237, 219, 13, 145, 130, 112, 217, 116, 199, 188, 88, 169, 91, 105, 27, 42, 166, 181, 5, 135, 212, 212, 118]);
   // Verify the POWO and delegation by calling into icp-sig-verifier
-  let principal;
   try {
-    principal = validateDelegationAndGetPrincipal(challenge, signedDelegationChainJson, currentTimeNs, iiCanisterId, icRootPublicKeyRaw);
+    const principal = validateDelegationAndGetPrincipal(challenge, signedDelegationChainJson, currentTimeNs, iiCanisterId, icRootPublicKeyRaw);
     console.log('Delegation verified, principal:', principal);
   } catch (error) {
     throw new Error('Verification failed');
@@ -90,5 +89,5 @@ export const verify = async (
     throw new Error('Bad message');
   }
 
-  return {isVerified: true, principal};
+  return true;
 };

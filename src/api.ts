@@ -4,6 +4,7 @@ import { Buffer } from 'buffer';
 import { verifyTypedData } from 'ethers/lib/utils';
 import { CreatePowoOptions, defaultDomain, EthPowoMessage, VerifyPowoOptions } from './types';
 import { authWithII } from './auth';
+import { Delegation } from '@dfinity/identity';
 
 const getTypes = (verifierAddress?: string, message?: string) => {
   const useTypes = {
@@ -36,8 +37,17 @@ export const create = async (
     // url: "http://internet_identity.localhost:5173",
     url: url || "https://jqajs-xiaaa-aaaad-aab5q-cai.ic0.app/",
     sessionPublicKey: new Uint8Array(messageB64),
-  });
-  const delegationString = JSON.stringify(delegationIdentity.getDelegation().toJSON());
+  }) as any;
+  //const delegationString = JSON.stringify(delegationIdentity.getDelegation().toJSON());
+
+  // make the delegation stringifyable
+  let delegation = delegationIdentity.delegations[0] as Omit<Delegation, 'expiration'> & {expiration: string};
+  delegation.expiration = delegationIdentity.delegations[0].expiration.toString();
+  const delegationString = JSON.stringify(delegation);
+
+  // authnMethod "passkey"
+  // delegations [{…}]
+  // userPublicKey Uint8Array(62)
 
   const delegationB64 = Buffer.from(delegationString).toString('base64');
   return `${messageB64}.${delegationB64}`;

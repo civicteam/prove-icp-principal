@@ -1,23 +1,8 @@
 import { validateDelegationAndGetPrincipal } from './icp-sig-verifier/sig_verifier_js';
 // import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer';
 import { Buffer } from 'buffer';
-import { verifyTypedData } from 'ethers/lib/utils';
-import { CreatePowoOptions, defaultDomain, EthPowoMessage, VerifyPowoOptions } from './types';
+import { CreatePowoOptions, EthPowoMessage, VerifyPowoOptions } from './types';
 import { authWithII } from './auth';
-import { Delegation } from '@dfinity/identity';
-
-const getTypes = (verifierAddress?: string, message?: string) => {
-  const useTypes = {
-    PoWo: [{ name: 'expires', type: 'string' }],
-  };
-  if (verifierAddress) {
-    useTypes.PoWo.push({ name: 'verifierAddress', type: 'string' });
-  }
-  if (message) {
-    useTypes.PoWo.push({ name: 'message', type: 'string' });
-  }
-  return useTypes;
-};
 
 export const create = async (
   { message }: CreatePowoOptions,
@@ -38,16 +23,15 @@ export const create = async (
     url: url || "https://jqajs-xiaaa-aaaad-aab5q-cai.ic0.app/",
     sessionPublicKey: new Uint8Array(messageB64),
   }) as any;
-  //const delegationString = JSON.stringify(delegationIdentity.getDelegation().toJSON());
-
-  // make the delegation stringifyable
-  let delegation = delegationIdentity.delegations[0] as Omit<Delegation, 'expiration'> & {expiration: string};
-  delegation.expiration = delegationIdentity.delegations[0].expiration.toString();
-  const delegationString = JSON.stringify(delegation);
 
   // authnMethod "passkey"
   // delegations [{…}]
   // userPublicKey Uint8Array(62)
+
+  // make the delegation stringifyable
+  let delegation = delegationIdentity.delegations[0];
+  delegation.delegation.expiration = delegation.delegation.expiration.toString();
+  const delegationString = JSON.stringify(delegation);
 
   const delegationB64 = Buffer.from(delegationString).toString('base64');
   return `${messageB64}.${delegationB64}`;

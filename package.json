@@ -1,6 +1,6 @@
 {
   "name": "@civic/prove-icp-principal",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "description": "Library for providing a standard proof creation and verification for ICP principals",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

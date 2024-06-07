@@ -1414,6 +1414,7 @@ __metadata:
   resolution: "@civic/prove-icp-principal@workspace:."
   dependencies:
     "@dfinity/agent": "npm:^1.3.0"
+    "@dfinity/candid": "npm:^1.3.0"
     "@dfinity/identity": "npm:^1.3.0"
     "@dfinity/principal": "npm:^1.3.0"
     "@ethersproject/abstract-signer": "npm:^5.5.0"
@@ -1481,6 +1482,15 @@ __metadata:
     "@dfinity/candid": ^1.3.0
     "@dfinity/principal": ^1.3.0
   checksum: 2c74b0d02b793c419a217ee92c08b2c187e9f8a435e5865e4348a4adcbf251acb200728c897db0adbb7ead130e44ec84a84c0b3fd558cba5f892dae1e20df82f
+  languageName: node
+  linkType: hard
+
+"@dfinity/candid@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@dfinity/candid@npm:1.3.0"
+  peerDependencies:
+    "@dfinity/principal": ^1.3.0
+  checksum: c7030ac6d99cc0fad862d4c3d64fa0cd9223e35a6096136d2df50f04a55a3dbac4b20db55240559a76078b92c53c7d166f2e67e377baa5d38526264499bd891c
   languageName: node
   linkType: hard
 

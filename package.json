@@ -21,7 +21,7 @@
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "npm build",
+    "prepare": "npm run build",
     "script": "ts-node -O '{\"module\":\"commonjs\"}' --transpile-only --files",
     "size": "size-limit",
     "analyze": "size-limit --why"

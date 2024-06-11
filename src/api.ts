@@ -99,8 +99,7 @@ export const verify = async (
     console.log(error);
     throw new Error('Verification failed');
   }
-
-  if (new Date(decodedMessage.expires).getTime() < Date.now()) {
+  if (!currentTimeNsOverride && new Date(decodedMessage.expires).getTime() < Date.now()) {
     throw new Error('Token Expired');
   }
 

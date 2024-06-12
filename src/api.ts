@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { CreatePowoOptions, EthPowoMessage, VerifyPowoOptions } from './types';
+import { CreatePowoOptions, ICPPowoMessage, VerifyPowoOptions } from './types';
 import { authWithII } from './auth';
 
 async function loadSigVerifier() {
@@ -32,7 +32,7 @@ export const uint8ArrayToHexString = (bytes: Uint8Array | number[]): string => {
 export const create = async ({ message }: CreatePowoOptions, url?: string): Promise<string> => {
   const tokenDurationMs = 1000 * 5 * 60; // 5 minutes
   const expires = new Date(Date.now() + tokenDurationMs);
-  const powoMessage: EthPowoMessage = {
+  const powoMessage: ICPPowoMessage = {
     expires: expires.toISOString(),
     ...(message ? { message } : {}),
   };
@@ -80,7 +80,7 @@ export const verify = async (
   const decodedDelegation = Buffer.from(b64Delegation, 'base64').toString();
   const decodedMessageAsBuffer = Buffer.from(b64Message, 'base64');
   console.log(b64Message, decodedMessageAsBuffer.toString());
-  const decodedMessage = JSON.parse(decodedMessageAsBuffer.toString()) as EthPowoMessage;
+  const decodedMessage = JSON.parse(decodedMessageAsBuffer.toString()) as ICPPowoMessage;
 
   console.log('verifyPowo decoded', { decodedSignature: decodedDelegation, decodedMessage });
 

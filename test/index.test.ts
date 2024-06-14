@@ -45,10 +45,7 @@ describe('prove-icp-principal', () => {
     await expect(verify(expired.address, expired.proof, { message: 'test' }, undefined, iiCanisterIdOverride)).rejects.toThrow('Token Expired');
   });
 
-  // it("throws an error if the message doesn't match", async () => {
-  // const proof = await create({
-  //   message: 'bad',
-  // });
-  // await expect(verify('undefined', proof, { message: 'test' }, undefined, iiCanisterIdOverride)).rejects.toThrow('Bad message');
-  // });
+  it("throws an error if the message doesn't match", async () => {
+    await expect(verify('undefined', proofJWTFixture, { message: 'wrong' }, currentTimeNsOverride, iiCanisterIdOverride)).rejects.toThrow('Bad message');
+  });
 });

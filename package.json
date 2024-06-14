@@ -17,8 +17,8 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc --project tsconfig.esm.json",
-    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:esm": "tsc --project tsconfig.esm.json && cp -R src/icp-sig-verifier.nodejs dist/cjs/",
+    "build:cjs": "tsc --project tsconfig.cjs.json && cp -R src/icp-sig-verifier dist/esm/",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "npm run build",

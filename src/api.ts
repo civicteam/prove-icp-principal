@@ -13,7 +13,7 @@ async function loadSigVerifier() {
 }
 
 // ICP root key for mainnet 
-const ROOT_PUBLIC_KEY_RAW_LOCAL = new Uint8Array([
+const ROOT_PUBLIC_KEY_RAW_IC = new Uint8Array([
   0x81, 0x4c, 0x0e, 0x6e, 0xc7, 0x1f, 0xab, 0x58, 0x3b, 0x08, 0xbd, 0x81, 0x37, 0x3c, 0x25, 0x5c, 0x3c, 0x37, 0x1b,
   0x2e, 0x84, 0x86, 0x3c, 0x98, 0xa4, 0xf1, 0xe0, 0x8b, 0x74, 0x23, 0x5d, 0x14, 0xfb, 0x5d, 0x9c, 0x0c, 0xd5, 0x46,
   0xd9, 0x68, 0x5f, 0x91, 0x3a, 0x0c, 0x0b, 0x2c, 0xc5, 0x34, 0x15, 0x83, 0xbf, 0x4b, 0x43, 0x92, 0xe4, 0x67, 0xdb,
@@ -41,7 +41,7 @@ export const create = async ({ message }: CreatePowoOptions, url?: string): Prom
 
   const delegationIdentity = (await authWithII({
     // The url needs to be aligned with the root key in the backend
-    url: url || 'https://jqajs-xiaaa-aaaad-aab5q-cai.ic0.app/',
+    url: url || 'https://identity.ic0.app',
     sessionPublicKey: new Uint8Array(powoBuffer),
   })) as any;
 
@@ -73,7 +73,8 @@ export const verify = async (
   proof: string,
   { message }: VerifyPowoOptions,
   currentTimeNsOverride?: bigint,
-  iiCanisterIdOverride?: string
+  iiCanisterIdOverride?: string,
+  rootPublicKeyOverride?: Uint8Array
 ): Promise<boolean> => {
   console.log('verifyPowo raw', { address, proof });
   const [b64Message, b64Delegation] = proof.split('.');
@@ -89,7 +90,7 @@ export const verify = async (
   const signedDelegationChainJson: string = decodedDelegation;
   const currentTimeNs: bigint = currentTimeNsOverride ? currentTimeNsOverride : process.hrtime.bigint();
   const iiCanisterId: string = iiCanisterIdOverride ? iiCanisterIdOverride : 'rdmx6-jaaaa-aaaaa-aaadq-cai';
-  const icRootPublicKeyRaw: Uint8Array = ROOT_PUBLIC_KEY_RAW_LOCAL;
+  const icRootPublicKeyRaw: Uint8Array = rootPublicKeyOverride ? rootPublicKeyOverride : ROOT_PUBLIC_KEY_RAW_IC;
   // Verify the POWO and delegation by calling into icp-sig-verifier
   try {
     console.log(signedDelegationChainJson);

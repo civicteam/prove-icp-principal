@@ -22,6 +22,10 @@ const ROOT_PUBLIC_KEY_RAW_IC = new Uint8Array([
   0xae,
 ]);
 
+// Civic backend canister ID - currently testing with local 
+const civicBackendCanisterId = process.env.VITE_CIVIC_BACKEND_CANISTER_ID;
+
+
 export const uint8ArrayToHexString = (bytes: Uint8Array | number[]): string => {
   if (!(bytes instanceof Uint8Array)) {
     bytes = Uint8Array.from(bytes);
@@ -42,6 +46,7 @@ export const create = async ({ message }: CreatePowoOptions, url?: string): Prom
   const delegationIdentity = (await authWithII({
     // The url needs to be aligned with the root key in the backend
     url: url || 'https://identity.ic0.app',
+    derivationOrigin: civicBackendCanisterId,
     sessionPublicKey: new Uint8Array(powoBuffer),
   })) as any;
 

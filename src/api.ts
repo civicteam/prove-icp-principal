@@ -100,6 +100,7 @@ export const verify = async (
   try {
     console.log(signedDelegationChainJson);
     const { validateDelegationAndGetPrincipal } = await loadSigVerifier();
+
     const principal = validateDelegationAndGetPrincipal(
       challenge,
       signedDelegationChainJson,
@@ -108,10 +109,14 @@ export const verify = async (
       icRootPublicKeyRaw
     );
     console.log('Delegation verified, principal:', principal);
+    if (address !== principal) {
+      throw new Error('Invalid principal');
+    }
   } catch (error) {
     console.log(error);
     throw new Error('Verification failed');
   }
+
   if (!currentTimeNsOverride && new Date(decodedMessage.expires).getTime() < Date.now()) {
     throw new Error('Token Expired');
   }
